@@ -1,79 +1,269 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>  تطبيقي</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مساعدي الذكي</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      text-align: center;
-    }
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f4f7fb;
+ color:#172033;
+}
+.header{
+ background:linear-gradient(135deg,#2563eb,#7c3aed);
+ color:white;
+ padding:28px 18px;
+ text-align:center;
+}
+.header h1{margin:0;font-size:30px}
+.header p{margin:8px 0 0;opacity:.9}
 
-    .header {
-      background: #2196f3;
-      color: white;
-      padding: 25px;
-      font-size: 28px;
-      font-weight: bold;
-    }
+.container{
+ max-width:600px;
+ margin:auto;
+ padding:20px;
+}
 
-    .container {
-      padding: 30px 20px;
-    }
+.card{
+ background:white;
+ border-radius:20px;
+ padding:20px;
+ margin-bottom:16px;
+ box-shadow:0 5px 20px #00000012;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      margin: 20px auto;
-      max-width: 400px;
-      border-radius: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
+.input{
+ width:100%;
+ padding:15px;
+ border:1px solid #ddd;
+ border-radius:12px;
+ font-size:16px;
+ margin-bottom:10px;
+}
 
-    button {
-      background: #2196f3;
-      color: white;
-      border: none;
-      padding: 14px 30px;
-      border-radius: 10px;
-      font-size: 18px;
-      cursor: pointer;
-    }
+button{
+ border:0;
+ border-radius:12px;
+ padding:13px 18px;
+ font-size:16px;
+ cursor:pointer;
+ background:#2563eb;
+ color:white;
+ margin:4px;
+}
 
-    button:hover {
-      background: #1976d2;
-    }
-  </style>
+button.secondary{background:#eef2ff;color:#2563eb}
+
+.buttons{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+}
+
+#answer{
+ min-height:55px;
+ background:#f8fafc;
+ border-radius:12px;
+ padding:15px;
+ line-height:1.7;
+ margin-top:12px;
+}
+
+.task{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px;
+ border-bottom:1px solid #eee;
+}
+
+.task button{
+ background:#ef4444;
+ padding:7px 10px;
+}
+
+textarea{
+ width:100%;
+ min-height:120px;
+ border:1px solid #ddd;
+ border-radius:12px;
+ padding:12px;
+ font-size:16px;
+}
+
+.footer{
+ text-align:center;
+ color:#777;
+ padding:20px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    مرحباً بك في تطبيقي
-  </div>
+<div class="header">
+<h1>🤖 مساعدي الذكي</h1>
+<p>مساعدك اليومي في مكان واحد</p>
+</div>
 
-  <div class="container">
+<div class="container">
 
-    <div class="card">
-      <h2>أهلاً وسهلاً 👋</h2>
-      <p>هذا هو أول إصدار من تطبيقي.</p>
+<div class="card">
+<h2>💬 المساعد</h2>
 
-      <button onclick="showMessage()">
-        اضغط هنا
-      </button>
-    </div>
+<input id="question" class="input"
+placeholder="اكتب سؤالك هنا...">
 
-  </div>
+<button onclick="ask()">اسأل المساعد ✨</button>
 
-  <script>
-    function showMessage() {
-      alert("مرحباً بك! التطبيق يعمل بنجاح 🎉");
-    }
-  </script>
+<div id="answer">مرحبًا! كيف يمكنني مساعدتك؟</div>
+</div>
+
+<div class="card">
+<h2>⚡ أدوات سريعة</h2>
+
+<div class="buttons">
+<button onclick="showTime()">🕐 الوقت</button>
+<button onclick="showDate()">📅 التاريخ</button>
+<button onclick="calculator()">🧮 آلة حاسبة</button>
+<button onclick="clearAnswer()" class="secondary">🗑️ مسح</button>
+</div>
+</div>
+
+<div class="card">
+<h2>✅ مهامي</h2>
+
+<input id="taskInput" class="input"
+placeholder="اكتب مهمة جديدة">
+
+<button onclick="addTask()">إضافة مهمة ➕</button>
+
+<div id="tasks"></div>
+</div>
+
+<div class="card">
+<h2>📝 ملاحظاتي</h2>
+
+<textarea id="notes"
+placeholder="اكتب ملاحظاتك هنا..."></textarea>
+
+<br>
+
+<button onclick="saveNotes()">حفظ الملاحظات 💾</button>
+<button onclick="loadNotes()" class="secondary">عرض المحفوظ</button>
+</div>
+
+</div>
+
+<div class="footer">
+مساعدي الذكي © 2026
+</div>
+
+<script>
+
+function ask(){
+ let q=document.getElementById("question").value.trim();
+ let answer=document.getElementById("answer");
+
+ if(!q){
+  answer.innerHTML="اكتب سؤالك أولًا 😊";
+  return;
+ }
+
+ let text=q.toLowerCase();
+
+ if(text.includes("مرحبا") || text.includes("السلام")){
+  answer.innerHTML="أهلًا وسهلًا 👋 أنا مساعدك الذكي.";
+ }
+ else if(text.includes("اسم")){
+  answer.innerHTML="اسمي مساعدي الذكي 🤖";
+ }
+ else if(text.includes("شكرا") || text.includes("شكر")){
+  answer.innerHTML="العفو! أنا هنا لمساعدتك 🌟";
+ }
+ else if(text.includes("وقت")){
+  showTime();
+ }
+ else if(text.includes("تاريخ")){
+  showDate();
+ }
+ else{
+  answer.innerHTML=
+  "فهمت طلبك: <b>"+q+
+  "</b><br>هذه نسخة أولية من المساعد الذكي، ويمكن تطويرها لاحقًا لتتصل بخدمة ذكاء اصطناعي حقيقية.";
+ }
+}
+
+function showTime(){
+ let now=new Date();
+ document.getElementById("answer").innerHTML=
+ "🕐 الوقت الآن: <b>"+now.toLocaleTimeString("ar")+"</b>";
+}
+
+function showDate(){
+ let now=new Date();
+ document.getElementById("answer").innerHTML=
+ "📅 التاريخ اليوم: <b>"+now.toLocaleDateString("ar")+"</b>";
+}
+
+function calculator(){
+ let n=prompt("اكتب العملية الحسابية مثل: 10+5*2");
+ if(n){
+  try{
+   let result=Function("return "+n)();
+   document.getElementById("answer").innerHTML=
+   "🧮 النتيجة: <b>"+result+"</b>";
+  }catch(e){
+   document.getElementById("answer").innerHTML=
+   "❌ العملية غير صحيحة";
+  }
+ }
+}
+
+function clearAnswer(){
+ document.getElementById("answer").innerHTML="";
+}
+
+function addTask(){
+ let input=document.getElementById("taskInput");
+ let task=input.value.trim();
+
+ if(!task)return;
+
+ let div=document.createElement("div");
+ div.className="task";
+
+ let span=document.createElement("span");
+ span.textContent="📌 "+task;
+
+ let btn=document.createElement("button");
+ btn.textContent="حذف";
+ btn.onclick=function(){div.remove()};
+
+ div.appendChild(span);
+ div.appendChild(btn);
+
+ document.getElementById("tasks").appendChild(div);
+
+ input.value="";
+}
+
+function saveNotes(){
+ let notes=document.getElementById("notes").value;
+ localStorage.setItem("smartNotes",notes);
+ alert("تم حفظ الملاحظات ✅");
+}
+
+function loadNotes(){
+ let notes=localStorage.getItem("smartNotes") || "";
+ document.getElementById("notes").value=notes;
+}
+
+</script>
 
 </body>
 </html>
